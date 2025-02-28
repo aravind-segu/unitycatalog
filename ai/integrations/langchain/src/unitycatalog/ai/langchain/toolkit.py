@@ -1,6 +1,6 @@
 import json
 from typing import Any, Dict, List, Optional
-
+import threading
 from langchain_core.pydantic_v1 import BaseModel, Field, root_validator
 from langchain_core.tools import StructuredTool
 
@@ -78,6 +78,10 @@ class UCFunctionToolkit(BaseModel):
         function_info = client.get_function(function_name)
 
         def func(*args: Any, **kwargs: Any) -> str:
+            print("INVOKING TOOL")
+            current_thread = threading.current_thread()
+            thread_data = current_thread.__dict__
+            print(thread_data)
             args_json = json.loads(json.dumps(kwargs, default=str))
             result = client.execute_function(
                 function_name=function_name,
