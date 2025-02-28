@@ -252,7 +252,7 @@ class DatabricksFunctionClient(BaseFunctionClient):
 
     def set_default_spark_session(self):
         print("DEFAULT SPARK SESSION")
-        if not self._is_spark_session_active():
+        if self._is_spark_session_active():
             _validate_databricks_connect_available()
             from databricks.connect.session import DatabricksSession as SparkSession
             print("CLIENT")
