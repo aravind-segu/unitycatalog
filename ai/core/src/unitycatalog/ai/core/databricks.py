@@ -258,6 +258,7 @@ class DatabricksFunctionClient(BaseFunctionClient):
             if self.profile:
                 builder = SparkSession.builder.profile(self.profile)
             elif self.client is not None:
+                print("ADDING CLIENT CONFIG")
                 builder = SparkSession.builder.sdkConfig(self.client.config)
             else:
                 builder = SparkSession.builder
