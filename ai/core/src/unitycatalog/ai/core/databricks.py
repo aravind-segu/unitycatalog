@@ -251,10 +251,12 @@ class DatabricksFunctionClient(BaseFunctionClient):
         return self.spark.getActiveSession() is not None
 
     def set_default_spark_session(self):
+        print("DEFAULT SPARK SESSION")
         if not self._is_spark_session_active():
             _validate_databricks_connect_available()
             from databricks.connect.session import DatabricksSession as SparkSession
-
+            print("CLIENT")
+            print(self.client)
             if self.profile:
                 builder = SparkSession.builder.profile(self.profile)
             elif self.client is not None:
