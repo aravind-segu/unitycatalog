@@ -69,6 +69,8 @@ WAREHOUSE_DEFINED_NOT_SUPPORTED_MESSAGE = (
 
 
 _logger = logging.getLogger(__name__)
+print(__name__)
+_logger.setLevel(logging.DEBUG)
 
 _classic_workspace_warning_emitted = False
 _classic_workspace_thread_lock = threading.Lock()
@@ -252,21 +254,25 @@ class DatabricksFunctionClient(BaseFunctionClient):
 
     def set_default_spark_session(self):
         print("DEFAULT SPARK SESSION")
+        _logger.error("DEFAULT SPARK SESSION")
         if not self._is_spark_session_active():
             _validate_databricks_connect_available()
             from databricks.connect.session import DatabricksSession as SparkSession
             print("CLIENT")
+            _logger.error("CLIENT")
             print(self.client)
+            _logger.error("CLIENT")
             if self.profile:
                 builder = SparkSession.builder.profile(self.profile).serverless(True)
             elif self.client is not None:
                 print("SETTING CONFIG WITH SERVERLESS")
+                _logger.error("SETTING CONFIG WITH SERVERLESS")
                 config = self.client.config
                 config.as_dict().pop("cluster_id", None)
                 config.serverless_compute_id = "auto"
                 builder = SparkSession.builder.sdkConfig(config)
             else:
-                builder = SparkSession.builder.serverless(True)
+                builder = None
             self.spark = builder.getOrCreate()
 
     def stop_spark_session(self):
