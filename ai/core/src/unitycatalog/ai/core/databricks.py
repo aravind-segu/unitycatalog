@@ -697,6 +697,7 @@ class DatabricksFunctionClient(BaseFunctionClient):
     def _execute_uc_functions_with_serverless(
         self, function_info: "FunctionInfo", parameters: Dict[str, Any]
     ) -> FunctionExecutionResult:
+        print("EXECUTING UC FUNCTION")
         _logger.info("Using databricks connect to execute functions with serverless compute.")
         self.set_default_spark_session()
 
