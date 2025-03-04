@@ -68,7 +68,7 @@ WAREHOUSE_DEFINED_NOT_SUPPORTED_MESSAGE = (
 )
 
 
-_logger = logging.getLogger(__name__)
+_logger = logging.getLogger("UC_CORE_LOGGER")
 print(__name__)
 _logger.setLevel(logging.DEBUG)
 
