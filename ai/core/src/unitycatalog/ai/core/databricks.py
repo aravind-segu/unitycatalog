@@ -251,16 +251,16 @@ class DatabricksFunctionClient(BaseFunctionClient):
         return self.spark.getActiveSession() is not None
 
     def set_default_spark_session(self):
-        _logger.error("DEFAULT SPARK SESSION")
+        print("DEFAULT SPARK SESSION")
         if not self._is_spark_session_active():
             _validate_databricks_connect_available()
             from databricks.connect.session import DatabricksSession as SparkSession
-            _logger.error("CLIENT")
-            _logger.error(self.client)
+            print("CLIENT")
+            print(self.client)
             if self.profile:
                 builder = SparkSession.builder.profile(self.profile).serverless(True)
             elif self.client is not None:
-                _logger.error("SETTING CONFIG WITH SERVERLESS")
+                print("SETTING CONFIG WITH SERVERLESS")
                 config = self.client.config
                 config.as_dict().pop("cluster_id", None)
                 config.serverless_compute_id = "auto"
