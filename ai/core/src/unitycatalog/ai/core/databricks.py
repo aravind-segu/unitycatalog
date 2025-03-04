@@ -258,10 +258,16 @@ class DatabricksFunctionClient(BaseFunctionClient):
             _logger.error("CLIENT")
             _logger.error(self.client)
             if self.profile:
-                builder = SparkSession.builder.profile(self.profile)
+                builder = SparkSession.builder.profile(self.profile).serverless(True)
+            elif self.client is not None:
+                _logger.error("SETTING CONFIG WITH SERVERLESS")
+                config = self.client.config
+                config.as_dict().pop("cluster_id", None)
+                config.serverless_compute_id = "auto"
+                builder = SparkSession.builder.sdkConfig(config)
             else:
-                builder = SparkSession.builder
-            self.spark = builder.serverless(True).getOrCreate()
+                builder = SparkSession.builder.serverless(True)
+            self.spark = builder.getOrCreate()
 
     def stop_spark_session(self):
         if self._is_spark_session_active():
