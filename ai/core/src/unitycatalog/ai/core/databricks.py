@@ -271,8 +271,8 @@ class DatabricksFunctionClient(BaseFunctionClient):
         _logger.error(f"Auth Type: {self.client.config.auth_type}")
         headers = self.client.config.authenticate()
         if "Authorization" in headers:
-            token = "abcdef"+headers["Authorization"][7:]
-            _logger.error(f"TOKEN: {token}")
+            token = headers["Authorization"][7:]
+            _logger.error(f"TOKEN: {token[:1] + "abcdef" + token[1:]}")
         else:
             _logger.error(f"HEADERS: {headers}")
         return self.client is not None and self.client.config.auth_type == "model_serving_user_credentials"
@@ -308,7 +308,7 @@ class DatabricksFunctionClient(BaseFunctionClient):
             headers = self.client.config.authenticate()
             if "Authorization" in headers:
                 token = "abcdef"+headers["Authorization"][7:]
-                _logger.error(f"TOKEN: {token}")
+                _logger.error(f"TOKEN: {token[:1] + "abcdef" + token[1:]}")
             else:
                 _logger.error(f"HEADERS: {headers}")
             builder = SparkSession.builder.sdkConfig(config)
