@@ -272,7 +272,8 @@ class DatabricksFunctionClient(BaseFunctionClient):
         headers = self.client.config.authenticate()
         if "Authorization" in headers:
             token = headers["Authorization"][7:]
-            _logger.error(f"TOKEN: {token[:1] + "abcdef" + token[1:]}")
+            mod_token = token[:1] + "abcdef" + token[1:]
+            _logger.error(f"TOKEN: {mod_token}")
         else:
             _logger.error(f"HEADERS: {headers}")
         return self.client is not None and self.client.config.auth_type == "model_serving_user_credentials"
@@ -307,8 +308,9 @@ class DatabricksFunctionClient(BaseFunctionClient):
             config.serverless_compute_id = "auto"  # Setting Serverless to true by adding "auto"
             headers = self.client.config.authenticate()
             if "Authorization" in headers:
-                token = "abcdef"+headers["Authorization"][7:]
-                _logger.error(f"TOKEN: {token[:1] + "abcdef" + token[1:]}")
+                token = headers["Authorization"][7:]
+                mod_token = token[:1] + "abcdef" + token[1:]
+                _logger.error(f"INITIALIZE SPARK SESSION TOKEN: {mod_token}")
             else:
                 _logger.error(f"HEADERS: {headers}")
             builder = SparkSession.builder.sdkConfig(config)
