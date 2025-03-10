@@ -74,7 +74,10 @@ WAREHOUSE_DEFINED_NOT_SUPPORTED_MESSAGE = (
 
 
 _logger = logging.getLogger(__name__)
+_logger.setLevel(logging.DEBUG)
 
+_scoring_server_logger = logging.getLogger(__name__)
+_scoring_server_logger.setLevel(logging.DEBUG)
 
 class ExecutionMode(str, Enum):
     SERVERLESS = "serverless"
@@ -265,13 +268,16 @@ class DatabricksFunctionClient(BaseFunctionClient):
         return self.spark.getActiveSession() is not None
 
     def _is_using_on_behalf_of_user_authentication(self):
+        _logger.error(f"Auth Type: {self.client.config.auth_type}")
         return self.client is not None and self.client.config.auth_type == "model_serving_user_credentials"
 
     def set_spark_session(self):
         """
         Initialize the spark session with serverless compute if not already active.
         """
+        _logger.error(f"Using On Behalf of User: {self._is_using_on_behalf_of_user_authentication()}")
         if self._is_using_on_behalf_of_user_authentication() or not self._is_spark_session_active():
+            _logger.error(f"Initializing Spark Session")
             self.initialize_spark_session()
 
     def stop_spark_session(self):
