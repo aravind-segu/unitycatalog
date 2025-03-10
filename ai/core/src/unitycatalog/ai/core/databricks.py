@@ -264,11 +264,14 @@ class DatabricksFunctionClient(BaseFunctionClient):
             return not self.spark.is_stopped
         return self.spark.getActiveSession() is not None
 
+    def _is_using_on_behalf_of_user_authentication(self):
+        return self.client is not None and self.client.config.auth_type == "model_serving_user_credentials"
+
     def set_spark_session(self):
         """
         Initialize the spark session with serverless compute if not already active.
         """
-        if not self._is_spark_session_active():
+        if self._is_using_on_behalf_of_user_authentication() or not self._is_spark_session_active():
             self.initialize_spark_session()
 
     def stop_spark_session(self):
